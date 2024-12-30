@@ -9,19 +9,19 @@ import Foundation
 import UIKit
 import LinkPresentation
 
-class OptionalTextActivityItemSource: NSObject, UIActivityItemSource {
+public class OptionalTextActivityItemSource: NSObject, UIActivityItemSource {
     let text: String
     weak var viewController: UIViewController?
     
-    init(text: String) {
+    public init(text: String) {
         self.text = text
     }
     
-    func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
+    public func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
         return text
     }
     
-    func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
+    public func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
         if activityType?.rawValue == "net.whatsapp.WhatsApp.ShareExtension" {
             // WhatsApp doesn't support both image and text, so return nil and thus only sharing an image. Also alert user about this on the first time.
             let alertedAboutWhatsAppDefaultsKey = "DidAlertAboutWhatsAppLimitation"
@@ -47,26 +47,26 @@ class OptionalTextActivityItemSource: NSObject, UIActivityItemSource {
 /// For whatever reason `UIActivityViewController` on iOS 13 only provides a preview of the image if it's passed as a URL, rather than a `UIImage` (if `UIImage` just shows app icon, see here: https://stackoverflow.com/questions/57850483/).
 /// However we can't pass the URL to the image because when paired with a String on iOS 13 (image URLs are fine on their own) Messages won't accept it.
 /// So when sharing both, wrap the UIImage object and manually provide the preview via the `LinkPresentation` framework.
-class ImageActivityItemSource: NSObject, UIActivityItemSource {
+public class ImageActivityItemSource: NSObject, UIActivityItemSource {
     let image: UIImage
     var title: String = "Share Image"
-    init(image: UIImage, title:String? = nil) {
+    public init(image: UIImage, title:String? = nil) {
         self.image = image
         if let title = title {
             self.title = title
         }
     }
     
-    func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
+    public func activityViewControllerPlaceholderItem(_ activityViewController: UIActivityViewController) -> Any {
         return image
     }
     
-    func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
+    public func activityViewController(_ activityViewController: UIActivityViewController, itemForActivityType activityType: UIActivity.ActivityType?) -> Any? {
         return image
     }
     
     @available(iOS 13.0, *)
-    func activityViewControllerLinkMetadata(_ activityViewController: UIActivityViewController) -> LPLinkMetadata? {
+    public func activityViewControllerLinkMetadata(_ activityViewController: UIActivityViewController) -> LPLinkMetadata? {
         let imageProvider = NSItemProvider(object: image)
         
         let metadata = LPLinkMetadata()

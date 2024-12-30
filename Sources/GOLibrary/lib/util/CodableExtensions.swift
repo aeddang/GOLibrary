@@ -6,22 +6,22 @@
 //
 import Foundation
 
-struct JSONCodingKeys: CodingKey {
-    var stringValue: String
-    var intValue: Int?
+public struct JSONCodingKeys: CodingKey {
+    public var stringValue: String
+    public var intValue: Int?
 
-    init?(stringValue: String) {
+    public init?(stringValue: String) {
         self.stringValue = stringValue
     }
     
-    init?(intValue: Int) {
+    public init?(intValue: Int) {
         self.init(stringValue: "\(intValue)")
         self.intValue = intValue
     }
 }
 
 //MARK:- Decoding Extensions
-extension KeyedDecodingContainer {
+public extension KeyedDecodingContainer {
     func decode(_ type: [String: Any].Type, forKey key: K) throws -> [String: Any] {
         let container = try self.nestedContainer(keyedBy: JSONCodingKeys.self, forKey: key)
         return try container.decode(type)
@@ -82,7 +82,7 @@ extension KeyedDecodingContainer {
     }
 }
 
-extension UnkeyedDecodingContainer {
+public extension UnkeyedDecodingContainer {
     mutating func decode(_ type: [Any].Type) throws -> [Any] {
         var array: [Any] = []
         while isAtEnd == false {
@@ -111,7 +111,7 @@ extension UnkeyedDecodingContainer {
 }
 
 //MARK:- Encoding Extensions
-extension KeyedEncodingContainer {
+public extension KeyedEncodingContainer {
     mutating func encodeIfPresent(_ value: [String: Any]?, forKey key: KeyedEncodingContainer<K>.Key) throws {
         guard let safeValue = value, !safeValue.isEmpty else {
             return
@@ -157,7 +157,7 @@ extension KeyedEncodingContainer {
     }
 }
 
-extension UnkeyedEncodingContainer {
+public extension UnkeyedEncodingContainer {
     mutating func encode(contentsOf sequence: [[String: Any]]) throws {
         for dict in sequence {
             try self.encodeIfPresent(dict)
@@ -187,7 +187,7 @@ extension UnkeyedEncodingContainer {
 }
 
 //MARK:- Extra extensions for managing data easily
-extension Decodable {
+public extension Decodable {
     init?(dictionary: [String: Any]) {
         do {
             let data = try JSONSerialization.data(withJSONObject: dictionary, options: .prettyPrinted)
@@ -202,7 +202,7 @@ extension Decodable {
     }
 }
 
-extension Encodable {
+public extension Encodable {
     var dictionary: [String: Any]? {
         let encoder = JSONEncoder()
         guard let data = try? encoder.encode(self) else { return nil }
@@ -214,7 +214,7 @@ extension Encodable {
     }
 }
 
-extension Dictionary {
+public extension Dictionary {
     var prettyJSON: String {
         do {
             let jsonData = try JSONSerialization.data(withJSONObject: self, options: [.prettyPrinted])
@@ -230,8 +230,8 @@ extension Dictionary {
     }
 }
 
-class Utility {
-    static func decode<T>(_ decodable: T.Type, from data: Data) -> T? where T: Decodable {
+public class Utility {
+    public static func decode<T>(_ decodable: T.Type, from data: Data) -> T? where T: Decodable {
         var decodedData: T?
         do {
             decodedData = try JSONDecoder().decode(T.self, from: data)

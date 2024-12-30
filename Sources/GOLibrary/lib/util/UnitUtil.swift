@@ -10,18 +10,7 @@ import SwiftUI
 import UIKit
 import CryptoKit
 
-extension Binding {
-    func onChange(_ handler: @escaping (Value) -> Void) -> Binding<Value> {
-        return Binding(
-            get: { self.wrappedValue },
-            set: { selection in
-                self.wrappedValue = selection
-                handler(selection)
-        })
-    }
-}
-
-extension Double {
+public extension Double {
     func toInt() -> Int {
         if self >= Double(Int.min) && self < Double(Int.max) {
             return Int(self)
@@ -64,7 +53,7 @@ extension Double {
     }
 }
 
-extension Date{
+public extension Date{
     func localDate() -> Date {
         let nowUTC = Date()
         let timeZoneOffset = Double(TimeZone.current.secondsFromGMT(for: nowUTC))
@@ -122,7 +111,7 @@ extension Date{
     
 }
 
-extension CryptoKit.SHA256.Digest {
+public extension CryptoKit.SHA256.Digest {
     var bytes: [UInt8] { Array(makeIterator()) }
     var data: Data { Data(bytes) }
     var hexStr: String {
@@ -132,7 +121,7 @@ extension CryptoKit.SHA256.Digest {
 
 
 
-extension String{
+public extension String{
     func toDigits(_ n:Int) -> String {
         let num = Int(floor(Double(self) ?? 0))
         //DataLog.d("num " + num.description , tag:"toDigits")
@@ -521,7 +510,7 @@ extension String{
                     code = hex.toInt()
                 }
                 if code >= 0x1F3FB && code <= 0x1F3FF {
-                    if let em = UnicodeScalar(code) {
+                    if UnicodeScalar(code) != nil {
                         tone = hex
                         let r = f+surfix
                         emojiStr = emojiStr.replacingOccurrences(of: r, with: "", options: .literal, range: nil)
@@ -565,7 +554,7 @@ extension String{
     }
 }
 
-extension Color {
+public extension Color {
     init(rgb: Int) {
         let r = Double((rgb >> 16) & 0xFF)/256.0
         let g = Double((rgb >> 8) & 0xFF)/256.0
@@ -578,10 +567,12 @@ extension Color {
     }
     
     init(hexaDecimalString: String) {
+        /*
         let str = hexaDecimalString
             .replace("#", with: "")
             .replace("0x", with: "")
             .replace("0X", with: "")
+        */
         if hexaDecimalString.count < 6 {
             self.init(
                 red: 0,
@@ -619,9 +610,9 @@ extension Color {
     
     func toHexString() -> String {
         let components = self.components()
-        var r: CGFloat = components.r
-        var g: CGFloat = components.g
-        var b: CGFloat = components.b
+        let r: CGFloat = components.r
+        let g: CGFloat = components.g
+        let b: CGFloat = components.b
         //var a: CGFloat = components.a
         return String(
             format: "%02X%02X%02X",
@@ -647,8 +638,8 @@ extension Color {
     }
 }
 
-extension Formatter {
-    static let withSeparator: NumberFormatter = { 
+public extension Formatter {
+    static let withSeparator: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.groupingSeparator = " "
@@ -656,18 +647,18 @@ extension Formatter {
     }()
 }
 
-extension Formatter {
+public extension Formatter {
     static let number = NumberFormatter()
 }
 
-extension Locale {
+public extension Locale {
     static let englishUS: Locale = .init(identifier: "en_US")
     static let frenchFR: Locale = .init(identifier: "fr_FR")
     static let portugueseBR: Locale = .init(identifier: "pt_BR")
     static let koreaKR: Locale = .init(identifier: "ko")
     // ... and so on
 }
-extension Numeric {
+public extension Numeric {
     func formatted(with groupingSeparator: String? = nil, style: NumberFormatter.Style, locale: Locale = .current) -> String {
         Formatter.number.locale = locale
         Formatter.number.numberStyle = style
@@ -687,7 +678,7 @@ extension Numeric {
     var calculator: String { formatted(with:",", style: .decimal) }
 }
 
-extension Data {
+public extension Data {
     init?(hexString: String) {
         let length = hexString.count / 2
         var data = Data(capacity: length)
@@ -712,7 +703,7 @@ extension Data {
 }
 
 
-extension UIAccessibility {
+public extension UIAccessibility {
     @MainActor
     static func setFocusTo(_ object: Any?) {
         if UIAccessibility.isVoiceOverRunning {
@@ -733,26 +724,26 @@ extension UIAccessibility {
     }
 }
 
-extension CGFloat {
+public extension CGFloat {
     func toRadians() -> CGFloat {
         return self * CGFloat(Double.pi) / 180.0
     }
 }
 
-extension CGPoint{
+public extension CGPoint{
     func getAngleBetweenPoints(target:CGPoint) -> Double {
         let n = 270 - (atan2(self.x - target.x, self.y - target.y)) * 180 / .pi
         return n
     }
 }
 
-extension CGSize {
+public extension CGSize {
   static func + (lhs: Self, rhs: Self) -> Self {
     CGSize(width: lhs.width + rhs.width, height: lhs.height + rhs.height)
   }
 }
 
-extension Collection {
+public extension Collection {
     /// Returns the element at the specified index if it is within bounds, otherwise nil.
     subscript (safe index: Index) -> Element? {
         return indices.contains(index) ? self[index] : nil

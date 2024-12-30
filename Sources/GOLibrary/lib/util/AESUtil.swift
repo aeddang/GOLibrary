@@ -28,7 +28,7 @@ public class AESUtil {
         return  crypt ?? ""
     }
         
-    struct AES {
+    public struct AES {
         private let key: Data
         private let iv: Data
 

@@ -13,21 +13,21 @@ import NetworkExtension
 import AdSupport
 import CoreTelephony
 
-struct AppUtil{
-    static var version: String {
+public struct AppUtil{
+    public static var version: String {
         guard let dictionary = Bundle.main.infoDictionary,
             let v = dictionary["CFBundleShortVersionString"] as? String
             else {return ""}
             return v
     }
     
-    static var build: String {
+    public static var build: String {
         guard let dictionary = Bundle.main.infoDictionary,
             let b = dictionary["CFBundleVersion"] as? String else {return "1"}
             return b
     }
     
-    static var model: String {
+    public static var model: String {
         if let simulatorModelIdentifier = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"] {
             return simulatorModelIdentifier
         }
@@ -37,7 +37,7 @@ struct AppUtil{
     }
     
     
-    static var idfa: String {
+    public static var idfa: String {
         //isAdvertisingTrackingEnabled iOS14에서부터 deprecated되서 사용못함
 //        if ASIdentifierManager.shared().isAdvertisingTrackingEnabled {
 //            let identifier = ASIdentifierManager.shared().advertisingIdentifier
@@ -52,7 +52,7 @@ struct AppUtil{
     }
     
     @MainActor
-    static func getWindow()->UIWindow?{
+    public static func getWindow()->UIWindow?{
         guard let firstScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else {
             return nil
         }
@@ -63,25 +63,25 @@ struct AppUtil{
     }
     
     @MainActor
-    static func goAppStore(){
+    public static func goAppStore(){
         let path = "https://itunes.apple.com/kr/app/apple-store/id1255487920?mt=8"
         Self.openURL(path)
     }
     
     @MainActor
-    static func hideKeyboard() {
+    public static func hideKeyboard() {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
     
     @MainActor
-    static func isPad() -> Bool {
+    public static func isPad() -> Bool {
         if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad {
             return true
         }
         return false
     }
     @MainActor
-    static func isWideScreen() -> Bool {
+    public static func isWideScreen() -> Bool {
         if UIScreen.main.bounds.size.width > 1300 {
             return true
         }
@@ -89,7 +89,7 @@ struct AppUtil{
     }
     
     @MainActor
-    static func openURL(_ path:String) {
+    public static func openURL(_ path:String) {
         guard let url = URL(string: path.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? path) else {
             return
         }
@@ -97,7 +97,7 @@ struct AppUtil{
     }
     
     @MainActor
-    static func openEmail(_ email:String) {
+    public static func openEmail(_ email:String) {
         if let url = URL(string: "mailto:\(email)") {
           if #available(iOS 10.0, *) {
             UIApplication.shared.open(url)
@@ -107,7 +107,7 @@ struct AppUtil{
         }
     }
     
-    static func getYearRange(len:Int , offset:Int = 0 )->[Int]{
+    public static func getYearRange(len:Int , offset:Int = 0 )->[Int]{
         let calendar = Calendar.current
         let components = calendar.dateComponents([.year], from: Date())
         let range = 0...len
@@ -115,34 +115,34 @@ struct AppUtil{
         let ranges = range.map{ (year - $0) }
         return ranges
     }
-    static func networkTimeDate() -> Date {
+    public static func networkTimeDate() -> Date {
         return Date()
     }
     
-    static func networkTime() -> Int {
+    public static func networkTime() -> Int {
         return Int(networkTimeDate().timeIntervalSince1970)
     }
 
-    static func getTime(fromInt: Int) -> String {
+    public static func getTime(fromInt: Int) -> String {
         let date = Date(timeIntervalSince1970: TimeInterval(fromInt))
         return Self.getTime(fromDate: date)
     }
 
-    static func getTime(fromDate: Date) -> String {
+    public static func getTime(fromDate: Date) -> String {
         let fmt = DateFormatter()
         fmt.dateFormat = "yyyy-MM-dd HH:mm:ss"
         fmt.timeZone = TimeZone.current
         return fmt.string(from: fromDate)
     }
     
-    static func getTime(fromDate: Date, format: String) -> String {
+    public static func getTime(fromDate: Date, format: String) -> String {
         let fmt = DateFormatter()
         fmt.dateFormat = format
         fmt.timeZone = TimeZone.current
         return fmt.string(from: fromDate)
     }
     
-    static func getDate(dateString: String, format: String) -> Date? {
+    public static func getDate(dateString: String, format: String) -> Date? {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = format
         dateFormatter.timeZone = TimeZone.current
@@ -150,13 +150,13 @@ struct AppUtil{
     }
     
     @MainActor
-    static func goAppSettings() {
+    public static func goAppSettings() {
         if let appSettings = URL(string: UIApplication.openSettingsURLString) {
             UIApplication.shared.open(appSettings, options: [:], completionHandler: nil)
         }
     }
     
-    static func getNetworkInfo(compleationHandler: @escaping ([String: Any])->Void){
+    public static func getNetworkInfo(compleationHandler: @escaping ([String: Any])->Void){
         var currentWirelessInfo: [String: Any] = [:]
         if #available(iOS 14.0, *) {
             NEHotspotNetwork.fetchCurrent { network in
@@ -188,7 +188,7 @@ struct AppUtil{
         }
     }
     
-    static func getSSID() -> String? {
+    public static func getSSID() -> String? {
         let interfaces = CNCopySupportedInterfaces()
         if interfaces == nil { return nil }
         guard let interfacesArray = interfaces as? [String] else { return nil }
@@ -202,7 +202,7 @@ struct AppUtil{
         return nil
     }
     
-    static func getIPAddress() -> String? {
+    public static func getIPAddress() -> String? {
         var address: String?
         var ifaddr: UnsafeMutablePointer<ifaddrs>? = nil
         if getifaddrs(&ifaddr) == 0 {
@@ -225,16 +225,16 @@ struct AppUtil{
         return address 
     }
     
-    static func getSafeString(_ s:String?,  defaultValue:String = "") -> String {
+    public static func getSafeString(_ s:String?,  defaultValue:String = "") -> String {
         guard let s = s else { return defaultValue }
         return s.isEmpty ? defaultValue : s
     }
-    static func getSafeInt(bool:Bool?,  defaultValue:Int = 1) -> Int {
+    public static func getSafeInt(bool:Bool?,  defaultValue:Int = 1) -> Int {
         guard let v = bool else { return defaultValue }
         return v ? 1 : 0
     }
     
-    static func getJsonString(dic:[String:Any])->String?{
+    public static func getJsonString(dic:[String:Any])->String?{
         if JSONSerialization.isValidJSONObject(dic) {
             do{
                 let data =  try JSONSerialization.data(withJSONObject: dic , options: [])
@@ -250,7 +250,7 @@ struct AppUtil{
         return nil
     }
     
-    static func getJsonParam(jsonString: String) -> [String: Any]? {
+    public static func getJsonParam(jsonString: String) -> [String: Any]? {
         guard let data = jsonString.data(using: .utf8) else {
             DataLog.e("parse : jsonString data error", tag: "getJsonParam")
             return nil
@@ -268,7 +268,7 @@ struct AppUtil{
         }
     }
     
-    static func getJsonArray(jsonString: String) -> [Any]? {
+    public static func getJsonArray(jsonString: String) -> [Any]? {
         guard let data = jsonString.data(using: .utf8) else {
             DataLog.e("parse : jsonString data error", tag: "getJsonArray")
             return nil
@@ -286,7 +286,7 @@ struct AppUtil{
         }
     }
     
-    static func getQurry(url: String, key:String) -> String? {
+    public static func getQurry(url: String, key:String) -> String? {
         if let components = URLComponents(string: url) {
             if let queryItems = components.queryItems {
                 if let item = queryItems.first(where: {$0.name == key}) {
@@ -299,7 +299,7 @@ struct AppUtil{
         return nil
     }
     
-    static func getQurryString(dic:[String:String], prefix:String = "?") -> String {
+    public static func getQurryString(dic:[String:String], prefix:String = "?") -> String {
         if !dic.isEmpty {
             var query = dic.keys.reduce("", {
                 let v = dic[$1] ?? ""
@@ -313,7 +313,7 @@ struct AppUtil{
     }
 
     @MainActor
-    static func setAutolayoutSamesize(item: UIView, toitem: UIView) {
+    public static func setAutolayoutSamesize(item: UIView, toitem: UIView) {
         item.translatesAutoresizingMaskIntoConstraints = false
         
         let top = NSLayoutConstraint(item: item,
@@ -345,7 +345,7 @@ struct AppUtil{
     }
     
     
-    static func binarySearch<T: Comparable>(_ a: [T], key: T, range: Range<Int>) -> Int? {
+    public static func binarySearch<T: Comparable>(_ a: [T], key: T, range: Range<Int>) -> Int? {
         if range.lowerBound >= range.upperBound {
             return nil
         } else {
@@ -360,14 +360,14 @@ struct AppUtil{
         }
     }
     
-    static func hasDynamicIsland(model:String)->Bool {
+    public static func hasDynamicIsland(model:String)->Bool {
         switch model {
         case "iPhone14,7", "iPhone14,8","iPhone15,2", "iPhone15,3": return true
         default : return false
         }
     }
     
-    static func isCarrierInformationSkt() -> Bool  {
+    public static func isCarrierInformationSkt() -> Bool  {
         let netinfo = CTTelephonyNetworkInfo()
         var isSkt = true // 16버전 체크 불가능 기본갑설정
        
@@ -382,7 +382,7 @@ struct AppUtil{
         return isSkt
     }
     
-    static func switchDeviceOrientationToMask(_ interface:UIInterfaceOrientation) -> UIInterfaceOrientationMask{
+    public static func switchDeviceOrientationToMask(_ interface:UIInterfaceOrientation) -> UIInterfaceOrientationMask{
         switch interface{
         case .landscapeRight: return .landscapeRight
         case .landscapeLeft: return .landscapeLeft
@@ -391,7 +391,7 @@ struct AppUtil{
         default: return .all
         }
     }
-    static func switchDeviceOrientationToString(_ interface:UIInterfaceOrientation) -> String{
+    public static func switchDeviceOrientationToString(_ interface:UIInterfaceOrientation) -> String{
         switch interface{
         case .landscapeRight: return "Orientation landscapeRight"
         case .landscapeLeft: return "Orientation landscapeLeft"
@@ -401,7 +401,7 @@ struct AppUtil{
         }
     }
     
-    static func switchDeviceMaskToOrientation(_ mask:UIInterfaceOrientationMask) -> UIInterfaceOrientation{
+    public static func switchDeviceMaskToOrientation(_ mask:UIInterfaceOrientationMask) -> UIInterfaceOrientation{
         switch mask{
         case .landscapeRight: return .landscapeRight
         case .landscapeLeft: return .landscapeLeft
@@ -413,7 +413,7 @@ struct AppUtil{
         }
     }
     
-    static func switchDeviceMaskToString(_ mask:UIInterfaceOrientationMask) -> String{
+    public static func switchDeviceMaskToString(_ mask:UIInterfaceOrientationMask) -> String{
         switch mask{
         case .landscapeRight: return "Mask landscapeRight"
         case .landscapeLeft: return "Mask landscapeLeft"

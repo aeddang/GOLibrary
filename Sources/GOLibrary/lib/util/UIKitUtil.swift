@@ -12,7 +12,7 @@ import AudioToolbox
 
 
 
-extension UIColor {
+public extension UIColor {
     func toHexString() -> String {
         var r:CGFloat = 0
         var g:CGFloat = 0
@@ -25,7 +25,7 @@ extension UIColor {
 
 }
 
-extension UIImage {
+public extension UIImage {
     static func from(color: UIColor) -> UIImage {
         let rect = CGRect(x: 0, y: 0, width: 1, height: 1)
         UIGraphicsBeginImageContext(rect.size)
@@ -38,14 +38,14 @@ extension UIImage {
     }
 }
 
-extension UIDevice {
+public extension UIDevice {
     static func vibrate() {
         AudioServicesPlaySystemSound(kSystemSoundID_Vibrate)
     }
 }
 
 
-extension UIView {
+public extension UIView {
     func takeScreenshot() -> UIImage {
         // Begin context
         UIGraphicsBeginImageContextWithOptions(self.bounds.size, false, UIScreen.main.scale)
@@ -64,7 +64,7 @@ extension UIView {
     }
 }
 
-extension SwiftUI.View {
+public extension SwiftUI.View {
     func toVC() -> UIViewController {
         let vc = UIHostingController(rootView: self)
         vc.view.frame = UIScreen.main.bounds

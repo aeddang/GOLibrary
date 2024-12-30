@@ -138,10 +138,10 @@ struct ShadowTop: ViewModifier {
 }
 
 
-struct GetHeightModifier: ViewModifier {
+public struct GetHeightModifier: ViewModifier {
     @Binding var height: CGFloat
 
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         content.background(
             GeometryReader { geo -> Color in
                 DispatchQueue.main.async {

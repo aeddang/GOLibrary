@@ -12,7 +12,7 @@ import SwiftUI
 import Combine
 import WebKit
 
-extension View {
+public extension View {
     @ViewBuilder func exChangeTextColor(_ color: Color) -> some View {
         if UITraitCollection.current.userInterfaceStyle == .light {
             self.colorInvert().colorMultiply(color)
@@ -83,7 +83,7 @@ fileprivate final class InputAccessoryHackHelper: NSObject {
     @objc var inputAccessoryView: AnyObject? { return nil }
 }
 
-extension WKWebView {
+public extension WKWebView {
     func hack_removeInputAccessory() {
         guard let target = scrollView.subviews.first(where: {
             String(describing: type(of: $0)).hasPrefix("WKContent")

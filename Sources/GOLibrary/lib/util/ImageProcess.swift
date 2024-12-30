@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 import SwiftUI
-extension UIImage {
+public extension UIImage {
     func contextSize() -> CGSize {
         return CGSize(width: self.size.width * self.scale, height: self.size.height * self.scale)
     }

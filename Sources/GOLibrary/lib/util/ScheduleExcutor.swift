@@ -8,9 +8,9 @@
 import Foundation
 import Combine
 
-class ScheduleExcutor: ObservableObject, PageProtocol{
+public class ScheduleExcutor: ObservableObject, PageProtocol{
     private(set) var excutor:AnyCancellable? = nil
-    func reservation(delay:Double,_ action:@escaping () -> Void){
+    public func reservation(delay:Double,_ action:@escaping () -> Void){
         self.excutor?.cancel()
         self.excutor = Timer.publish(
             every:delay, on: .current, in: .common)
@@ -21,7 +21,7 @@ class ScheduleExcutor: ObservableObject, PageProtocol{
             }
     }
     
-    func scedule(delay:Double,_ action:@escaping (Int) -> Void){
+    public func scedule(delay:Double,_ action:@escaping (Int) -> Void){
         self.excutor?.cancel()
         var count = 0
         self.excutor = Timer.publish(
@@ -33,7 +33,7 @@ class ScheduleExcutor: ObservableObject, PageProtocol{
             }
     }
     
-    func cancel(){
+    public func cancel(){
         self.excutor?.cancel()
         self.excutor = nil
     }
