@@ -34,7 +34,7 @@ public protocol NetworkRoute:PageProtocol {
     func onRequestIntercepter(request:URLRequest)
 }
 
-extension NetworkRoute {
+public extension NetworkRoute {
     var headers: [String : String]?  { get{nil} set{headers=nil} }
     var overrideHeaders: [String : String]?  { get{nil} set{overrideHeaders=nil} }
     var query: [String: String]?  { get{nil} set{query=nil} }

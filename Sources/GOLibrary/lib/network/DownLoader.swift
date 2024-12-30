@@ -90,7 +90,7 @@ public class DownLoader:ObservableObject, PageProtocol{
     }
     
     @discardableResult
-    func resume()->Bool{
+    public func resume()->Bool{
         guard let session = self.session else {return false}
         if self.status != .pause {return false}
         session.resume()
@@ -99,7 +99,7 @@ public class DownLoader:ObservableObject, PageProtocol{
     }
     
     @discardableResult
-    func pause()->Bool{
+    public func pause()->Bool{
         guard let session = self.session else {return false}
         if self.status != .progress {return false}
         session.suspend()
@@ -107,7 +107,7 @@ public class DownLoader:ObservableObject, PageProtocol{
         return true
     }
     
-    func stop(){
+    public func stop(){
         self.session?.cancel{ resumeDataOrNil in
             guard let resumeData = resumeDataOrNil else {return}
             self.resumeData = resumeData
@@ -141,12 +141,12 @@ public class DownLoader:ObservableObject, PageProtocol{
     }
     
     
-    func removeAllFile(){
+    public func removeAllFile(){
         self.resumeData = nil
         removeFile()
         
     }
-    func removeFile(){
+    public func removeFile(){
         let filePath = self.getFileFullPath().path
         if FileManager.default.fileExists(atPath: filePath) {
             do {
@@ -158,7 +158,7 @@ public class DownLoader:ObservableObject, PageProtocol{
         }
     }
 
-    func getFile() -> Data?{
+    public func getFile() -> Data?{
         let filePath = self.getFileFullPath().path
         if FileManager.default.fileExists(atPath: filePath ) {
             return FileManager.default.contents(atPath: filePath)
@@ -166,7 +166,7 @@ public class DownLoader:ObservableObject, PageProtocol{
             return nil
         }
     }
-    func getFileFullPath() -> URL {
+    public func getFileFullPath() -> URL {
         return URL(fileURLWithPath: self.path).appendingPathComponent(fileName).appendingPathExtension(self.fileExtension)
     }
 }

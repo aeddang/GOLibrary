@@ -15,7 +15,7 @@ public class IwillGo:PageProtocol{
     private static let isHome = "isHome"
     
     var page: PageObject? = nil
-    init(with page:PageObject? = nil) {
+    public init(with page:PageObject? = nil) {
         self.page = page
     }
     

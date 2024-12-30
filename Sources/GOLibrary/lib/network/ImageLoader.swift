@@ -133,7 +133,7 @@ public class ImageLoader: ObservableObject, PageProtocol{
 }
 
 
-class AsyncImageLoader: ObservableObject, PageProtocol{
+public class AsyncImageLoader: ObservableObject, PageProtocol{
 
     @Published var event: ImageLoader.Event? = nil {didSet{ if event != nil { event = nil} }}
     private var cancellable: AnyCancellable?
@@ -143,12 +143,12 @@ class AsyncImageLoader: ObservableObject, PageProtocol{
         cancel()
     }
     
-    func cancel() {
+    public func cancel() {
         cancellable?.cancel()
         cancellable = nil
     }
     
-    func load(url: String?, id: String?){
+    public func load(url: String?, id: String?){
         if isLoading {
             self.cancel()
             return
