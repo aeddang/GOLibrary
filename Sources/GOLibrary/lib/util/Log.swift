@@ -12,7 +12,7 @@ protocol Log {
     static var tag:String { get }
     static var lv:Int { get }
 }
-struct LogManager  {
+public struct LogManager  {
     nonisolated(unsafe) static var isLaunchTrace = false
     static nonisolated(unsafe) fileprivate(set) var memoryLog:String = ""
     static nonisolated(unsafe) fileprivate(set) var traceLog:String = ""
@@ -62,17 +62,17 @@ extension Log {
         Self.log(message, tag:tag, log:.default, type:.error )
     }
 }
-struct PageLog:Log {
+public struct PageLog:Log {
     nonisolated(unsafe) static var tag: String = "[MYTV] Page"
     nonisolated(unsafe) static var lv: Int = 1
 }
 
-struct ComponentLog:Log {
+public struct ComponentLog:Log {
     nonisolated(unsafe) static var tag: String = "[MYTV] Component"
     nonisolated(unsafe) static var lv: Int = 1
 }
 
-struct DataLog:Log {
+public struct DataLog:Log {
     nonisolated(unsafe) static var tag: String = "[MYTV] Data"
     nonisolated(unsafe) static var lv: Int = 1
 }
