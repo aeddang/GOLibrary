@@ -156,7 +156,7 @@ public protocol Network:PageProtocol {
     
 }
 
-extension Network {
+public extension Network {
     var decoder:JSONDecoder { get{ .init() } }
     var encoding: String.Encoding { get{ .utf8 } }
     
@@ -283,19 +283,19 @@ extension Network {
 struct Blank:Decodable {}
 struct BlankError:Error {}
 
-class MultipartFormData {
+public class MultipartFormData {
     var request: URLRequest
     var encoding: String.Encoding
     private lazy var boundary: String = {
        return String(format: "%08X%08X", arc4random(), arc4random())
     }()
     
-    init(request:URLRequest, encoding:String.Encoding) {
+    public init(request:URLRequest, encoding:String.Encoding) {
         self.request = request
         self.encoding = encoding
     }
     
-    func append(value: String, name: String) {
+    public func append(value: String, name: String) {
 
         request.httpBody?.append("--\(boundary)\r\n".data(using: encoding)!)
         request.httpBody?.append("Content-Disposition: form-data; name=\"\(name)\"\r\n\r\n".data(using: encoding)!)
@@ -307,23 +307,23 @@ class MultipartFormData {
     }
     
     
-    func append(filePath: String, name: String) throws {
+    public func append(filePath: String, name: String) throws {
         let url = URL(fileURLWithPath: filePath)
         try append(fileUrl: url, name: name)
     }
     
-    func append(fileUrl: URL, name: String) throws {
+    public func append(fileUrl: URL, name: String) throws {
         let fileName = fileUrl.lastPathComponent
         let mimeType = contentType(for: fileUrl.pathExtension)
         try append(fileUrl: fileUrl, name: name, fileName: fileName, mimeType: mimeType)
     }
     
-    func append(fileUrl: URL, name: String, fileName: String, mimeType: String) throws {
+    public func append(fileUrl: URL, name: String, fileName: String, mimeType: String) throws {
         let data = try Data(contentsOf: fileUrl)
         append(file: data, name: name, fileName: fileName, mimeType: mimeType)
     }
     
-    func append(file: Data, name: String, fileName: String, mimeType: String) {
+    public func append(file: Data, name: String, fileName: String, mimeType: String) {
         request.httpBody?.append("--\(boundary)\r\n".data(using: encoding)!)
         request.httpBody?.append("Content-Disposition: form-data; name=\"\(name)\";".data(using: encoding)!)
         request.httpBody?.append("filename=\"\(fileName)\"\r\n".data(using: encoding)!)

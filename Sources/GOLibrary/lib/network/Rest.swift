@@ -16,18 +16,18 @@ open class Rest :PageProtocol{
     let network:Network
     private var anyCancellable = Set<AnyCancellable>()
     
-    init(network:Network) {
+    public init(network:Network) {
         self.network = network
     }
     
-    func clear(){
+    public func clear(){
         anyCancellable.forEach{
             $0.cancel()
         }
         anyCancellable.removeAll()
     }
     
-    func fetch<T: Decodable>(
+    public func fetch<T: Decodable>(
         route:NetworkRoute,
         completion: @escaping (T) -> Void,
         error: ((_ e:Error) -> Void)? = nil)
@@ -49,7 +49,7 @@ open class Rest :PageProtocol{
         .store(in: &anyCancellable)
     }
     
-    func fetch<T: Decodable>(
+    public func fetch<T: Decodable>(
         route:NetworkRoute,
         constructingBlock: @escaping (_ formData: MultipartFormData) -> Void,
         completion: @escaping (T) -> Void,
@@ -72,7 +72,7 @@ open class Rest :PageProtocol{
         .store(in: &anyCancellable)
     }
     
-    func fetch(
+    public func fetch(
         route:NetworkRoute,
         completion: @escaping ([String:Any]) -> Void,
         error: ((_ e:Error) -> Void)? = nil)
