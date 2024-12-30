@@ -10,6 +10,7 @@ import Combine
 
 public class ScheduleExcutor: ObservableObject, PageProtocol{
     private(set) var excutor:AnyCancellable? = nil
+    public init() {}
     public func reservation(delay:Double,_ action:@escaping () -> Void){
         self.excutor?.cancel()
         self.excutor = Timer.publish(
