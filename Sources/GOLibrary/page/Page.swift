@@ -25,9 +25,9 @@ public extension PageParam{
 
 public class PageObject : ObservableObject, Equatable, Identifiable, Hashable{
     public let id:String = UUID().uuidString
-    let pageID: PageID
-    let isPopup:Bool
-    let isHome:Bool
+    public let pageID: PageID
+    public let isPopup:Bool
+    public let isHome:Bool
     private(set) var params:[PageParam:Any]?
     
     init(
