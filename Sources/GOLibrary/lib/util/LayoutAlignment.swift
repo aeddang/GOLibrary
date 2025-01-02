@@ -10,68 +10,16 @@ import Foundation
 import SwiftUI
 
 
-public struct LayoutTop: ViewModifier {
-    var geometry:GeometryProxy
-    var height:CGFloat = 0
-    var margin:CGFloat = 0
-    public func body(content: Content) -> some View {
-        let pos = ((geometry.size.height - height)/2.0)
-        return content
-            .frame(height:height)
-            .offset(y:-pos + margin)
-    }
-}
-
-public struct LayoutBotttom: ViewModifier {
-    var geometry:GeometryProxy
-    var height:CGFloat = 0
-    var margin:CGFloat = 0
-    public func body(content: Content) -> some View {
-        let pos = ((geometry.size.height - height)/2.0)
-        return content
-            .frame(height:height)
-            .offset(y:pos - margin)
-    }
-}
-
-public struct LayoutLeft: ViewModifier {
-    var geometry:GeometryProxy
-    var width:CGFloat = 0
-    var margin:CGFloat = 0
-    public func body(content: Content) -> some View {
-        let pos = ((geometry.size.width - width)/2.0) - margin
-        return content
-            .frame(width:width)
-            .offset(x:-pos)
-    }
-}
-
-public struct LayoutRight: ViewModifier {
-    var geometry:GeometryProxy
-    var width:CGFloat = 0
-    var margin:CGFloat = 0
-    public func body(content: Content) -> some View {
-        let pos = ((geometry.size.width - width)/2.0) + margin
-        return content
-            .frame(width:width)
-            .offset(x:pos)
-    }
-}
-
-public struct LayoutCenter: ViewModifier {
-    public func body(content: Content) -> some View {
-        HStack {
-            Spacer()
-            content
-            Spacer()
-        }
-    }
-}
 
 public struct MatchParent: ViewModifier {
     var marginX:CGFloat = 0
     var marginY:CGFloat = 0
     var margin:CGFloat? = nil
+    public init(marginX: CGFloat = 0, marginY: CGFloat = 0, margin: CGFloat? = nil) {
+        self.marginX = marginX
+        self.marginY = marginY
+        self.margin = margin
+    }
     public func body(content: Content) -> some View {
         let mx = margin ?? marginX
         let my = margin ?? marginY
@@ -83,6 +31,10 @@ public struct MatchParent: ViewModifier {
 public struct MatchHorizontal: ViewModifier {
     var height:CGFloat = 0
     var margin:CGFloat = 0
+    public init(height: CGFloat = 0, margin: CGFloat = 0) {
+        self.height = height
+        self.margin = margin
+    }
     public func body(content: Content) -> some View {
         return content
             .frame(minWidth: 0, maxWidth: .infinity - (margin * 2.0) , minHeight: height, maxHeight: height)
@@ -93,6 +45,10 @@ public struct MatchHorizontal: ViewModifier {
 public struct MatchVertical: ViewModifier {
     var width:CGFloat = 0
     var margin:CGFloat = 0
+    public init(width: CGFloat = 0 , margin: CGFloat = 0) {
+        self.width = width
+        self.margin = margin
+    }
     public func body(content: Content) -> some View {
         return content
             .frame(minWidth: width, maxWidth: width , minHeight:0, maxHeight: .infinity - (margin * 2.0))
@@ -101,36 +57,28 @@ public struct MatchVertical: ViewModifier {
 }
 
 
-public struct LineVerticalDotted: Shape {
-    public func path(in rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: CGPoint(x: 0, y: 0))
-        path.addLine(to: CGPoint(x: 0, y:rect.height))
-        return path
-    }
-}
-
 
 
 public struct Shadow: ViewModifier {
     var color:Color = Color.black
     var opacity:Double = 0.4
+    public init(color: Color = Color.black, opacity: Double = 0.4) {
+        self.color = color
+        self.opacity = opacity
+    }
     public func body(content: Content) -> some View {
         return content
             .shadow(color: color.opacity(opacity), radius:5, x: 0, y: 4)
     }
 }
-struct ShadowText: ViewModifier {
-    var color:Color = Color.black
-    var opacity:Double = 0.4
-    func body(content: Content) -> some View {
-        return content
-            .shadow(color: color.opacity(opacity), radius:5, x: 0, y: 4)
-    }
-}
+
 struct ShadowTop: ViewModifier {
     var color:Color = Color.black
     var opacity:Double = 0.4
+    public init(color: Color = Color.black, opacity: Double = 0.4) {
+        self.color = color
+        self.opacity = opacity
+    }
     func body(content: Content) -> some View {
         return content
             .shadow(color: color.opacity(opacity), radius:5, x: 0, y: -4)
@@ -138,17 +86,3 @@ struct ShadowTop: ViewModifier {
 }
 
 
-public struct GetHeightModifier: ViewModifier {
-    @Binding var height: CGFloat
-
-    public func body(content: Content) -> some View {
-        content.background(
-            GeometryReader { geo -> Color in
-                DispatchQueue.main.async {
-                    height = geo.size.height 
-                }
-                return Color.clear
-            }
-        )
-    }
-}
