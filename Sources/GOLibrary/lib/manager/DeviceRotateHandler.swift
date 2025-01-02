@@ -9,7 +9,7 @@ import Foundation
 
 open class AppDelegate: NSObject, UIApplicationDelegate {
 
-    static var orientationLock = UIInterfaceOrientationMask.all
+    static public fileprivate(set)var orientationLock = UIInterfaceOrientationMask.all
     public override init() {
         super.init()
     }
