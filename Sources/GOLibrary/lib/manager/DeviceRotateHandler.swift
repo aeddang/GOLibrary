@@ -10,6 +10,10 @@ import Foundation
 open class AppDelegate: NSObject, UIApplicationDelegate {
 
     static var orientationLock = UIInterfaceOrientationMask.all
+    public override init() {
+        super.init()
+    }
+    
     public func application(_ application: UIApplication, supportedInterfaceOrientationsFor window: UIWindow?) -> UIInterfaceOrientationMask {
         return AppDelegate.orientationLock
     }
@@ -19,7 +23,11 @@ open class AppDelegate: NSObject, UIApplicationDelegate {
 public class DeviceRotateHandler{
     private var currentOrientationMask:UIInterfaceOrientationMask = .all
     private let delayCurrentDeviceOrientation:ScheduleExcutor = ScheduleExcutor()
-  
+    public init(){}
+    public init(currentOrientationMask: UIInterfaceOrientationMask) {
+        self.currentOrientationMask = currentOrientationMask
+    }
+    
     @MainActor
     public func updateOrientationMask(_ orientationMask:UIInterfaceOrientationMask){
         self.delayCurrentDeviceOrientation.cancel()
