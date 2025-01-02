@@ -28,9 +28,9 @@ public class PageObject : ObservableObject, Equatable, Identifiable, Hashable{
     public let pageID: PageID
     public let isPopup:Bool
     public let isHome:Bool
-    private(set) var params:[PageParam:Any]?
+    public private(set) var params:[PageParam:Any]?
     
-    init(
+    public init(
         pageID:PageID,
         params:[PageParam:Any]? = nil,
         isPopup:Bool = false,
