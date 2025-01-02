@@ -120,10 +120,45 @@ public class PagePresenter:ObservableObject, PageProtocol{
     private var pageCount:Int = 0
     private var finalAddedPage:PageObject? = nil
     
-    @Published public internal(set) var screenOrientation:UIDeviceOrientation = .portrait
-    @Published public internal(set) var screenSize:CGSize = .zero
-    var screenEdgeInsets:EdgeInsets = .init()
+    @Published public private(set) var isPortrait:Bool = true
+    @Published public private(set) var screenOrientation:UIDeviceOrientation = .portrait
+    @Published public private(set) var screenSize:CGSize = .zero
+    public private(set) var screenEdgeInsets:EdgeInsets = .init()
     
+    public init(isPortrait:Bool = true) {
+        self.isPortrait = isPortrait
+    }
+    
+    @MainActor
+    public func update(orientation:UIDeviceOrientation, geometry:GeometryProxy){
+        
+        ComponentLog.d("isFlat ->" + orientation.isFlat.description, tag: self.tag)
+      
+        if orientation.isFlat {
+            self.screenEdgeInsets = geometry.safeAreaInsets
+            let size = geometry.size
+            self.screenSize = size
+            self.screenOrientation = orientation
+            let isPortrait = size.width <= size.height
+            if isPortrait {
+                self.isPortrait = isPortrait
+                ComponentLog.d("flat size " + geometry.size.debugDescription,tag: self.tag)
+                ComponentLog.d("isPortrait " + isPortrait.description,tag: self.tag)
+            }
+            
+        } else {
+            ComponentLog.d("isLandscape -> " + orientation.isLandscape.description, tag: self.tag)
+            ComponentLog.d("isPortrait -> " + orientation.isPortrait.description, tag: self.tag)
+            self.screenOrientation = orientation
+            self.isPortrait = orientation.isPortrait
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.05) {
+                let size = geometry.size
+                PageLog.d("size " + size.debugDescription,tag: self.tag)
+                self.screenEdgeInsets = geometry.safeAreaInsets
+                self.screenSize = size
+            }
+        }
+    }
     @discardableResult
     public func updatedPage(_ page:PageObject, count:Int = 0)->PageObject?{
         if page.isHome {
