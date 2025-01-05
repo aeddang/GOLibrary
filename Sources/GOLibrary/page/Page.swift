@@ -129,6 +129,22 @@ public class PagePresenter:ObservableObject, PageProtocol{
         self.isPortrait = isPortrait
     }
     
+    @discardableResult
+    public func excute(_ request:PageRequest)->PagePresenter{
+        self.request = request
+        return self
+    }
+    @discardableResult
+    public func loading(_ on:Bool)->PagePresenter{
+        self.isLoading = on
+        return self
+    }
+    @discardableResult
+    public func lock(_ on:Bool)->PagePresenter{
+        self.isLock = on
+        return self
+    }
+    
     @MainActor
     public func update(orientation:UIDeviceOrientation, geometry:GeometryProxy){
         
@@ -159,6 +175,7 @@ public class PagePresenter:ObservableObject, PageProtocol{
             }
         }
     }
+    
     @discardableResult
     public func updatedPage(_ page:PageObject, count:Int = 0)->PageObject?{
         if page.isHome {
