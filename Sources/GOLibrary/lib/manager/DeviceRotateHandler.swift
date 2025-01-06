@@ -40,9 +40,8 @@ public class DeviceRotateHandler{
         self.delayCurrentDeviceOrientation.cancel()
         AppDelegate.orientationLock = orientationMask
         self.rotateDevice(orientationMask)
-        DispatchQueue.main.async{
-            self.attemptRotationToDeviceOrientation()
-        }
+        self.attemptRotationToDeviceOrientation()
+        
         self.delayCurrentDeviceOrientation.reservation(delay: 1.0){
             AppDelegate.orientationLock = self.currentOrientationMask
         }
@@ -51,7 +50,8 @@ public class DeviceRotateHandler{
     @MainActor
     private func attemptRotationToDeviceOrientation(){
         if #available(iOS 16.0, *) {
-            UINavigationController().setNeedsUpdateOfSupportedInterfaceOrientations()
+            //UINavigationController().setNeedsUpdateOfSupportedInterfaceOrientations()
+            UINavigationController.attemptRotationToDeviceOrientation()
         } else {
             UINavigationController.attemptRotationToDeviceOrientation()
         }
