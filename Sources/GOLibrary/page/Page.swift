@@ -103,6 +103,8 @@ public enum PageRequest {
     case movePage(PageObject)
     case showModal(PageObject), closeModal
     case closeAllPopup, closePopup
+    case alert(String), alertData(Any), closeAlert
+    case toast(String), toastData(Any), closeToast
 }
 
 public enum PageEvent {
