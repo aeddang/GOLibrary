@@ -26,9 +26,13 @@ public extension PageParam{
 public class PageObject : ObservableObject, Equatable, Identifiable, Hashable{
     public let id:String = UUID().uuidString
     public let pageID: PageID
-    public let isPopup:Bool
     public let isHome:Bool
     public private(set) var params:[PageParam:Any]?
+    
+    public private(set) var isPopup:Bool
+    public private(set) var detents: Set<PresentationDetent> = [.medium]
+    public private(set) var presentationBackgroundInteraction:Bool = false
+    public private(set) var presentationDragIndicator:Visibility = .visible
     
     public init(
         pageID:PageID,
@@ -72,6 +76,18 @@ public class PageObject : ObservableObject, Equatable, Identifiable, Hashable{
         return self
     }
     
+    @discardableResult
+    public func setupSheet(_ detents: Set<PresentationDetent> = [.medium],
+                    presentationBackgroundInteraction:Bool = false,
+                    presentationDragIndicator:Visibility = .visible
+    )->PageObject{
+        self.isPopup = true
+        self.detents = detents
+        self.presentationBackgroundInteraction = presentationBackgroundInteraction
+        self.presentationDragIndicator = presentationDragIndicator
+        return self
+    }
+    
     public func getParamValue(key:PageParam)->Any?{
         if params == nil { return nil }
         return params![key]
@@ -103,7 +119,7 @@ public enum PageRequest {
     case movePage(PageObject)
     case showModal(PageObject), closeModal
     case closeAllPopup, closePopup
-    case alert(String), alertData(Any), closeAlert
+    case alert(String, action:((_ idx:Int) -> Void)? = nil), alertData(Any, action:((_ idx:Int) -> Void)? = nil), closeAlert
     case toast(String), toastData(Any), closeToast
 }
 
