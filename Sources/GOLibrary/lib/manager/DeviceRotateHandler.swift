@@ -48,10 +48,9 @@ public class DeviceRotateHandler{
     }
     
     @MainActor
-    private func attemptRotationToDeviceOrientation(){
+    public func attemptRotationToDeviceOrientation(){
         if #available(iOS 16.0, *) {
-            //UINavigationController().setNeedsUpdateOfSupportedInterfaceOrientations()
-            UINavigationController.attemptRotationToDeviceOrientation()
+            UINavigationController().setNeedsUpdateOfSupportedInterfaceOrientations()
         } else {
             UINavigationController.attemptRotationToDeviceOrientation()
         }
